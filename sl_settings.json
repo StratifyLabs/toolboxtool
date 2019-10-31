@@ -1,0 +1,15 @@
+{
+	 "description": "The toolboxtool is a utility for testing and probing the inner workings of the Stratify Toolbox.",
+	 "github": "https://github.com/StratifyLabs/toolboxtool",
+	 "name": "toolboxtool",
+   "permissions": "public",
+   "publisher": "Stratify Labs, Inc",
+   "tags": "utility",
+   "type": "app",
+   "uid": "9cQyOTk3fZXOuMtPyf5j9X4H4b83",
+	 "version": "0.1",
+   "ramSize": 0,
+   "timestamp": 1552198313,
+	 "documentId": "",
+   "hardwareId": ""
+}
