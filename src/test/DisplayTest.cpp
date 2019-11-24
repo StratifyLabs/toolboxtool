@@ -36,6 +36,7 @@ bool DisplayTest::execute_class_api_case(){
 	}
 
 
+#if 0
 	Bitmap sketch;
 	sketch.set_bits_per_pixel(4);
 
@@ -77,9 +78,16 @@ bool DisplayTest::execute_class_api_case(){
 	Printer p;
 
 	p << sketch;
+#endif
 
+	display.fill(0);
+
+	display.draw_rectangle(Region(
+				Point(arg::XValue(10), arg::YValue(0)),
+				Area(arg::Width(80), arg::Height(80))
+				));
 	Region window(Point(arg::XValue(0), arg::YValue(0)),
-			 sketch.area());
+			 display.area());
 
 	if( display.set_window(window) < 0 ){
 		print_case_failed("failed to set window");
@@ -89,7 +97,7 @@ bool DisplayTest::execute_class_api_case(){
 	Timer t;
 	t.start();
 	if( display.write(
-			 arg::SourceBuffer(sketch.bmap()),
+			 arg::SourceBuffer(display.bmap()),
 			 arg::Size(sizeof(sg_bmap_t))
 			 ) < 0 ){
 		print_case_failed(
