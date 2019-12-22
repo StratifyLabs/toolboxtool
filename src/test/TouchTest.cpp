@@ -5,7 +5,7 @@
 #include <sapi/var.hpp>
 
 TouchTest::TouchTest() :
-	Test(arg::Name("TouchTest")){
+	Test("TouchTest"){
 
 }
 
@@ -17,8 +17,8 @@ bool TouchTest::execute_class_api_case(){
 
 	I2C i2c(2); //touch is on I2C 2
 	Pin alert( //PC13
-				  arg::PortNumber(2),
-				  arg::PinNumber(13)
+				  Pin::Port(2),
+				  Pin::Number(13)
 				  );
 
 	print_case_message("initialize alert pin");
@@ -38,16 +38,16 @@ bool TouchTest::execute_class_api_case(){
 	}
 
 	i2c.prepare(0x38);
-	i2c.write(arg::Location(ft_device_mode), 0x00);
-	i2c.write(arg::Location(ft_id_g_mode), 0x00);
-	i2c.write(arg::Location(ft_id_g_thgroup), 22);
-	i2c.write(arg::Location(ft_id_g_periodactive), 12);
+	i2c.write(I2C::Location(ft_device_mode), 0x00);
+	i2c.write(I2C::Location(ft_id_g_mode), 0x00);
+	i2c.write(I2C::Location(ft_id_g_thgroup), 22);
+	i2c.write(I2C::Location(ft_id_g_periodactive), 12);
 
 
 	Timer t;
 
 	touch_packet_t touch_packet;
-	DataReference touch_data(touch_packet);
+	Reference touch_data(touch_packet);
 
 	t.start();
 	while( t < duration ){
@@ -56,8 +56,8 @@ bool TouchTest::execute_class_api_case(){
 
 			i2c.prepare(0x38);
 			i2c.read(
-						arg::Location(ft_reg_num_finger),
-						arg::DestinationData(touch_data)
+						I2C::Location(ft_reg_num_finger),
+						touch_data
 						);
 
 

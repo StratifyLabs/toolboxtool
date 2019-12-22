@@ -9,6 +9,7 @@ elseif( ${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows" )
 endif()
 
 include(${SOS_TOOLCHAIN_CMAKE_PATH}/sos-variables.cmake)
+include(${SOS_TOOLCHAIN_CMAKE_PATH}/sos-sdk.cmake)
 
 # Override standard SOS variables here
 if( ${SOS_BUILD_CONFIG} STREQUAL arm )
@@ -21,20 +22,17 @@ endif()
 set(SOS_RAM_SIZE 131072)
 
 #Add sources to the project
-set(SOURCES_PREFIX ${CMAKE_SOURCE_DIR}/src)
-add_subdirectory(src)
-list(APPEND SOS_SOURCELIST ${SOURCES} ${CMAKE_SOURCE_DIR}/sl_settings.json ${CMAKE_SOURCE_DIR}/README.md)
+sos_sdk_add_subdirectory(SOS_SOURCELIST src)
+list(APPEND
+	SOS_SOURCELIST
+	${SOURCES} ${CMAKE_SOURCE_DIR}/sl_settings.json
+	${CMAKE_SOURCE_DIR}/README.md
+	)
 
 get_filename_component(SOS_NAME ${CMAKE_SOURCE_DIR} NAME)
 project(${SOS_NAME} CXX C)
 
-if( ${SOS_BUILD_CONFIG} STREQUAL arm )
-	#This will cross compile for all supported ARM architetures
-	set(SOS_ARCH v7em_f5dh)
-	include(${SOS_TOOLCHAIN_CMAKE_PATH}/sos-app.cmake)
-elseif( ${SOS_BUILD_CONFIG} STREQUAL link )
-	#This will compile natively. If the program uses hardware, it can "link" to a board over USB
-	set(SOS_ARCH link)
-	set(SOS_CONFIG release)
-	include(${SOS_TOOLCHAIN_CMAKE_PATH}/sos-app.cmake)
-endif()
+#This will cross compile for all supported ARM architetures
+set(SOS_ARCH v7em_f5dh)
+set(SOS_LIBRARIES ToolboxAPI)
+include(${SOS_TOOLCHAIN_CMAKE_PATH}/sos-app.cmake)

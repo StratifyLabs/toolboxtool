@@ -1,19 +1,12 @@
 
-set(SOURCES
-	${SOURCES_PREFIX}/../sl_settings.json
-	${SOURCES_PREFIX}/../README.md
-	${SOURCES_PREFIX}/sl_config.h
-	${SOURCES_PREFIX}/main.cpp
-	${SOURCES_PREFIX}/test/Test.cpp
-	${SOURCES_PREFIX}/test/Test.hpp
-	${SOURCES_PREFIX}/test/ScopeTest.cpp
-	${SOURCES_PREFIX}/test/ScopeTest.hpp
-	${SOURCES_PREFIX}/test/DisplayTest.cpp
-	${SOURCES_PREFIX}/test/DisplayTest.hpp
-	${SOURCES_PREFIX}/test/TouchTest.cpp
-	${SOURCES_PREFIX}/test/TouchTest.hpp
-	${SOURCES_PREFIX}/test/SignalGeneratorTest.cpp
-	${SOURCES_PREFIX}/test/SignalGeneratorTest.hpp
-	${SOURCES_PREFIX}/test/WifiSpiTest.cpp
-	${SOURCES_PREFIX}/test/WifiSpiTest.hpp
-	PARENT_SCOPE)
+
+sos_sdk_add_subdirectory(SOURCE_LIST test)
+
+list(
+	APPEND SOURCE_LIST
+	sl_config.h
+	main.cpp
+	)
+
+
+set(SOURCES ${SOURCE_LIST} PARENT_SCOPE)

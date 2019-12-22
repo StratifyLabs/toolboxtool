@@ -1,0 +1,23 @@
+
+set(SOURCES
+	Test.cpp
+	Test.hpp
+	ScopeTest.cpp
+	ScopeTest.hpp
+	PioExtenderTest.cpp
+	PioExtenderTest.hpp
+	PowerTouchTest.cpp
+	PowerTouchTest.hpp
+	GraphTest.cpp
+	GraphTest.hpp
+	ToolboxIoTest.cpp
+	ToolboxIoTest.hpp
+	DisplayTest.cpp
+	DisplayTest.hpp
+	TouchTest.cpp
+	TouchTest.hpp
+	SignalGeneratorTest.cpp
+	SignalGeneratorTest.hpp
+	WifiSpiTest.cpp
+	WifiSpiTest.hpp
+	PARENT_SCOPE)

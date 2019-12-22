@@ -15,7 +15,7 @@
 #define I_WIFIPHY_SET_FULL_DUPLEX _IOCTL(WIFI_PHY_IDENT_CHAR, I_MCU_TOTAL+3)
 #define I_WIFIPHY_SET_HALF_DUPLEX _IOCTL(WIFI_PHY_IDENT_CHAR, I_MCU_TOTAL+4)
 
-WifiSpiTest::WifiSpiTest() : Test(arg::Name("WifiSpi")){
+WifiSpiTest::WifiSpiTest() : Test("WifiSpi"){
 
 }
 
@@ -27,7 +27,7 @@ bool WifiSpiTest::execute_class_api_case(){
 
 
 	if( wifi_phy.open(
-			 arg::FilePath("/dev/wifi_phy"),
+			 "/dev/wifi_phy",
 			 fs::OpenFlags::read_write()
 			 ) < 0 ){
 		print_case_failed(wifi_phy.result(), __LINE__);
@@ -36,22 +36,22 @@ bool WifiSpiTest::execute_class_api_case(){
 
 
 	wifi_phy.ioctl(
-				arg::IoRequest(I_WIFIPHY_SET_HALF_DUPLEX)
+				Device::IoRequest(I_WIFIPHY_SET_HALF_DUPLEX)
 				);
 
 #if 1
 	wifi_phy.ioctl(
-				arg::IoRequest(I_WIFIPHY_ASSERT_RESET)
+				Device::IoRequest(I_WIFIPHY_ASSERT_RESET)
 				);
 	wait(Milliseconds(20));
 	wifi_phy.ioctl(
-				arg::IoRequest(I_WIFIPHY_DEASSERT_RESET)
+				Device::IoRequest(I_WIFIPHY_DEASSERT_RESET)
 				);
 	wait(Milliseconds(100));
 #endif
 
 
-	Data data(arg::Size(5));
+	Data data(5);
 
 	data.at_u8(0) = 0xCF;
 	data.at_u8(1) = 0xFF;
@@ -69,22 +69,18 @@ bool WifiSpiTest::execute_class_api_case(){
 
 	print_case_message("Writing SPI Bus");
 
-	if( wifi_phy.write(
-			 arg::SourceData(data)
-			 ) != (int)data.size() ){
+	if( wifi_phy.write(data) != (int)data.size() ){
 		print_case_failed(wifi_phy.result(), __LINE__);
 		return case_result();
 	}
 
-	data.resize(arg::Size(1));
+	data.resize(1);
 
 	//while(1){
 		for(u32 i=0; i	< 10; i++){
 			wait(Milliseconds(50));
 			//print_case_message("Reading SPI Bus");
-			if( wifi_phy.read(
-					 arg::DestinationData(data)
-					 ) != (int)data.size() ){
+			if( wifi_phy.read(data) != (int)data.size() ){
 				print_case_failed(wifi_phy.result(), __LINE__);
 				return case_result();
 			}

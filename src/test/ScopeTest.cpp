@@ -2,7 +2,7 @@
 
 #include <sapi/hal.hpp>
 
-ScopeTest::ScopeTest() : Test(arg::Name("ScopeTest")){
+ScopeTest::ScopeTest() : Test("ScopeTest"){
 
 }
 
@@ -11,18 +11,18 @@ ScopeTest::ScopeTest() : Test(arg::Name("ScopeTest")){
 bool ScopeTest::execute_class_api_case(){
 
 	Pin div_10_enable(
-				arg::PortNumber(4),
-				arg::PinNumber(0)
+				Pin::Port(4),
+				Pin::Number(0)
 				);
 
 	Pin vdd_out_enable(
-				arg::PortNumber(4),
-				arg::PinNumber(1)
+				Pin::Port(4),
+				Pin::Number(1)
 				);
 
 	Pin vref_enable(
-				arg::PortNumber(3),
-				arg::PinNumber(6)
+				Pin::Port(3),
+				Pin::Number(6)
 				);
 
 

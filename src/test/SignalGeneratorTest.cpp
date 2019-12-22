@@ -6,7 +6,7 @@
 #include <cmath>
 
 SignalGeneratorTest::SignalGeneratorTest() :
-	Test(arg::Name("SignalGeneratorTest")){
+	Test("SignalGeneratorTest"){
 
 }
 
@@ -37,7 +37,7 @@ bool SignalGeneratorTest::execute_class_api_case(){
 
 	print_case_message("open dac0");
 	signal_generator.open(
-				arg::FilePath("/dev/dac0"),
+				"/dev/dac0",
 				fs::OpenFlags::read_write()
 				);
 
@@ -50,7 +50,7 @@ bool SignalGeneratorTest::execute_class_api_case(){
 				);
 
 	signal_generator.ioctl(
-				arg::IoRequest(I_DAC_SETATTR)
+				Device::IoRequest(I_DAC_SETATTR)
 				);
 
 #if 0
@@ -73,14 +73,10 @@ bool SignalGeneratorTest::execute_class_api_case(){
 		return case_result();
 	}
 
-	Data frame(
-				arg::Size(
-					info.transmit().ffifo().frame_size()
-					)
-				);
+	Data frame(info.transmit().ffifo().frame_size());
 
 	frame.populate<u32>(
-				[](arg::Position position, arg::Count count)->u32{
+				[](Reference::Position position, Reference::Count count)->u32{
 		return position.argument()*4;
 	}
 	);
@@ -93,7 +89,7 @@ bool SignalGeneratorTest::execute_class_api_case(){
 				);
 
 	frame.populate<u32>(
-				[](arg::Position position, arg::Count count)->u32{
+				[](Reference::Position position, Reference::Count count)->u32{
 		u32 max = count.argument()*4-1;
 		u32 middle = count.argument()/2;
 		return position.argument() < middle ?
@@ -109,7 +105,7 @@ bool SignalGeneratorTest::execute_class_api_case(){
 				);
 
 	frame.populate<u32>(
-				[](arg::Position position, arg::Count count)->u32{
+				[](Reference::Position position, Reference::Count count)->u32{
 		u32 max = count.argument()*4-1;
 		float value = sinf(position.argument() * 2 * MCU_PI_FLOAT / count.argument());
 		return (value + 1.0f) * max/2;
@@ -123,7 +119,7 @@ bool SignalGeneratorTest::execute_class_api_case(){
 				);
 
 	frame.populate<u32>(
-				[](arg::Position position, arg::Count count)->u32{
+				[](Reference::Position position, Reference::Count count)->u32{
 		u32 middle = count.argument() / 2;
 		u32 maximum = count.argument() * 4-1;
 		return position.argument() < middle ?
@@ -154,13 +150,9 @@ bool SignalGeneratorTest::write_signal(
 
 	Timer t;
 	//fill the buffers
-	stream.write(
-				arg::SourceData(frame)
-				);
+	stream.write(frame);
 
-	stream.write(
-				arg::SourceData(frame)
-				);
+	stream.write(frame);
 
 	if( stream.start() < 0 ){
 		return case_result();
@@ -168,9 +160,7 @@ bool SignalGeneratorTest::write_signal(
 
 	t.start();
 	do {
-		stream.write(
-					arg::SourceData(frame)
-					);
+		stream.write(frame);
 	} while( t < duration );
 
 

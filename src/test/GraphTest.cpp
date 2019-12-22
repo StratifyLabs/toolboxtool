@@ -1,4 +1,4 @@
-#include "DisplayTest.hpp"
+#include "GraphTest.hpp"
 
 #include <sapi/hal.hpp>
 #include <sapi/draw.hpp>
@@ -6,13 +6,13 @@
 #include <sapi/sys.hpp>
 #include <sapi/var.hpp>
 
-DisplayTest::DisplayTest()
-	: Test("DisplayTest"){
+GraphTest::GraphTest()
+	: Test("GraphTest"){
 
 }
 
 
-bool DisplayTest::execute_class_api_case(){
+bool GraphTest::execute_class_api_case(){
 	DisplayDevice display;
 	Timer t;
 
@@ -41,30 +41,39 @@ bool DisplayTest::execute_class_api_case(){
 			.set_point(DrawingPoint(0,0))
 			.set_area(DrawingArea(1000,1000));
 
-	t.restart();
 
-	sg_color_t color = 11;
-	Array<drawing_int_t, 3> x_locations;
-	x_locations.at(0) = 25;
-	x_locations.at(1) = 375;
-	x_locations.at(2) = 725;
+	LineGraph line_graph;
 
-	Text().set_string("Waveform")
-			.set_color(3)
-			.set_align_center()
-			.set_align_middle()
-			.draw(drawing_attributes, DrawingPoint(0, 0), DrawingArea(1000, 250));
+	line_graph.x_data().push_back(0.0f);
+	line_graph.x_data().push_back(1.0f);
+	line_graph.x_data().push_back(2.0f);
 
-	for(auto x: x_locations){
-	RoundedRectangle()
-			.set_radius(40)
-			.set_color(color)
-			.draw(drawing_attributes, DrawingPoint(x, 500-250/2),  DrawingArea(250, 250));
+	line_graph.x_axis()
+			.set_minimum(0.0f)
+			.set_maximum(2.0f);
+
+	line_graph.y_axes()
+			.push_back(
+				Axis()
+				.set_minimum(0.0f)
+				.set_maximum(2.0f)
+				);
+
+	{
+		YData y_data;
+		y_data.set_color(1)
+				.push_back(1.0f)
+				.push_back(1.0f)
+				.push_back(2.0f);
+
+		line_graph.y_data()
+				.push_back(
+					y_data
+					);
 	}
-	t.stop();
-	print_case_message(
-				"drew rounded rectangles in %ld microseconds",
-				t.microseconds()
+
+	line_graph.draw(
+				drawing_attributes, DrawingPoint(100,100), DrawingArea(800,800)
 				);
 
 	Region window(
@@ -77,7 +86,6 @@ bool DisplayTest::execute_class_api_case(){
 		return case_result();
 	}
 
-	t.restart();
 	if( display.write(*display.bmap()) < 0 ){
 		print_case_failed(
 					"failed to write device (%d,%d)",
@@ -85,12 +93,7 @@ bool DisplayTest::execute_class_api_case(){
 					display.error_number());
 
 	}
-	t.stop();
-	print_case_message(
-				"wrote %d bytes in %d us",
-				display.return_value(),
-				t.microseconds()
-				);
+
 
 	return case_result();
 }

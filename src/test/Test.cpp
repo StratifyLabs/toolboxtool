@@ -6,51 +6,51 @@
 #include "WifiSpiTest.hpp"
 #include "DisplayTest.hpp"
 #include "SignalGeneratorTest.hpp"
+#include "GraphTest.hpp"
+#include "PioExtenderTest.hpp"
 
 bool Test::handle_tests(sys::Cli & cli){
 
-	if( cli.get_option(
-			 arg::OptionName("test")
-			 ) == "true" ){
+	if( cli.get_option("test") == "true" ){
 
 		test::Test::initialize(
-					arg::Name(cli.name()),
-					arg::VersionEncodedString(cli.version()),
-					arg::GitHash(cli.app_git_hash())
+					test::Test::Name(cli.name()),
+					test::Test::VersionEncodedString(cli.version()),
+					test::Test::GitHash(cli.app_git_hash())
 					);
 
-		if( cli.get_option(
-				 arg::OptionName("touch")
-				 ) == "true" ){
+		if( cli.get_option("touch") == "true" ){
 			TouchTest test;
 			test.execute(cli);
 		}
 
-		if( cli.get_option(
-				 arg::OptionName("wifispi")
-				 ) == "true" ){
+		if( cli.get_option("wifispi") == "true" ){
 			WifiSpiTest test;
 			test.execute(cli);
 		}
 
-		if( cli.get_option(
-				 arg::OptionName("scope")
-				 ) == "true" ){
+		if( cli.get_option("scope") == "true" ){
 			ScopeTest test;
 			test.execute(cli);
 		}
 
-		if( cli.get_option(
-				 arg::OptionName("signal")
-				 ) == "true" ){
+		if( cli.get_option("signal") == "true" ){
 			SignalGeneratorTest test;
 			test.execute(cli);
 		}
 
-		if( cli.get_option(
-				 arg::OptionName("display")
-				 ) == "true" ){
+		if( cli.get_option("display") == "true" ){
 			DisplayTest test;
+			test.execute(cli);
+		}
+
+		if( cli.get_option("graph") == "true" ){
+			GraphTest test;
+			test.execute(cli);
+		}
+
+		if( cli.get_option("pio") == "true" ){
+			PioExtenderTest test;
 			test.execute(cli);
 		}
 
