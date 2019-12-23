@@ -8,6 +8,7 @@
 #include "SignalGeneratorTest.hpp"
 #include "GraphTest.hpp"
 #include "PioExtenderTest.hpp"
+#include "ToolboxIoTest.hpp"
 
 bool Test::handle_tests(sys::Cli & cli){
 
@@ -51,6 +52,11 @@ bool Test::handle_tests(sys::Cli & cli){
 
 		if( cli.get_option("pio") == "true" ){
 			PioExtenderTest test;
+			test.execute(cli);
+		}
+
+		if( cli.get_option("io") == "true" ){
+			ToolboxIoTest test;
 			test.execute(cli);
 		}
 
