@@ -3,6 +3,8 @@
 #include <sapi/hal.hpp>
 #include <sapi/chrono.hpp>
 
+using namespace toolbox;
+
 #include "ToolboxIoTest.hpp"
 
 ToolboxIoTest::ToolboxIoTest() : Test("IoTest"){

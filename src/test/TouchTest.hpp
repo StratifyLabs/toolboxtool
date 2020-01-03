@@ -56,7 +56,6 @@ private:
 
 	u16 y(const touch_t & touch){
 		return ((touch.y_high << 8)|touch.y_low) & 0x0fff;
-
 	}
 
 	typedef struct MCU_PACK {

@@ -28,7 +28,7 @@ bool GraphTest::execute_class_api_case(){
 		print_case_failed("Failed to clear display");
 	}
 
-	if( display.set_mode(DisplayDevice::PALETTE) < 0 ){
+	if( display.set_mode(DisplayDevice::mode_palette) < 0 ){
 		print_case_failed("failed to set raw mode");
 		return case_result();
 	}

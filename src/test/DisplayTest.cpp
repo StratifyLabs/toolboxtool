@@ -1,7 +1,7 @@
 #include "DisplayTest.hpp"
 
 #include <sapi/hal.hpp>
-#include <sapi/draw.hpp>
+#include <sapi/ux.hpp>
 #include <sapi/sgfx.hpp>
 #include <sapi/sys.hpp>
 #include <sapi/var.hpp>
@@ -16,6 +16,8 @@ bool DisplayTest::execute_class_api_case(){
 	DisplayDevice display;
 	Timer t;
 
+	Bitmap scratch;
+
 	print_case_message("initialize display");
 	if( display.initialize("/dev/display0") < 0
 		 ) {
@@ -28,8 +30,8 @@ bool DisplayTest::execute_class_api_case(){
 		print_case_failed("Failed to clear display");
 	}
 
-	if( display.set_mode(DisplayDevice::PALETTE) < 0 ){
-		print_case_failed("failed to set raw mode");
+	if( display.set_mode(DisplayDevice::mode_palette) < 0 ){
+		print_case_failed("failed to set palette mode");
 		return case_result();
 	}
 
@@ -37,7 +39,13 @@ bool DisplayTest::execute_class_api_case(){
 
 	DrawingAttributes drawing_attributes;
 
-	drawing_attributes.set_bitmap(display)
+	scratch.allocate(
+				Area(320, 48),
+				Bitmap::BitsPerPixel(4)
+				);
+
+	drawing_attributes
+			.set_bitmap(scratch)
 			.set_point(DrawingPoint(0,0))
 			.set_area(DrawingArea(1000,1000));
 
@@ -53,7 +61,29 @@ bool DisplayTest::execute_class_api_case(){
 			.set_color(3)
 			.set_align_center()
 			.set_align_middle()
-			.draw(drawing_attributes, DrawingPoint(0, 0), DrawingArea(1000, 250));
+			.draw(drawing_attributes, DrawingPoint(0, 0), DrawingArea(1000, 1000));
+
+	scratch << Pen().set_color(3);
+	scratch.draw_line(Point(0,0), scratch.center());
+
+	display.set_window(
+				Region(
+					Point(0,0),
+					scratch.area()
+					)
+				);
+
+	if( display.return_value() < 0 ){
+		print_case_failed("Failed to set display window");
+	}
+
+	display.write(scratch);
+
+	if( display.return_value() < 0 ){
+		print_case_failed("Failed to write display");
+	}
+
+	return true;
 
 	for(auto x: x_locations){
 	RoundedRectangle()
@@ -69,7 +99,7 @@ bool DisplayTest::execute_class_api_case(){
 
 	Region window(
 				Point(0,0),
-				Area(320,240)
+				Area(64,64)
 				);
 
 	if( display.set_window(window) < 0 ){

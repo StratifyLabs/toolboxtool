@@ -4,6 +4,10 @@
 #include <sapi/chrono.hpp>
 #include <sapi/var.hpp>
 
+
+#include <ToolboxAPI/Touch.hpp>
+using namespace toolbox;
+
 TouchTest::TouchTest() :
 	Test("TouchTest"){
 
@@ -15,72 +19,45 @@ bool TouchTest::execute_class_api_case(){
 
 	Microseconds duration = Seconds(10);
 
-	I2C i2c(2); //touch is on I2C 2
-	Pin alert( //PC13
-				  Pin::Port(2),
-				  Pin::Number(13)
-				  );
-
-	print_case_message("initialize alert pin");
-	alert.initialize(
-				Pin::SET_INPUT | Pin::IS_PULLUP
-				);
-
-	if( alert.return_value() <  0 ){
-		print_case_failed(alert.result(), __LINE__);
-		return case_result();
-	}
-
-	print_case_message("initialize i2c");
-	if( i2c.initialize() < 0 ){
-		print_case_failed(i2c.result(), __LINE__);
-		return case_result();
-	}
-
-	i2c.prepare(0x38);
-	i2c.write(I2C::Location(ft_device_mode), 0x00);
-	i2c.write(I2C::Location(ft_id_g_mode), 0x00);
-	i2c.write(I2C::Location(ft_id_g_thgroup), 22);
-	i2c.write(I2C::Location(ft_id_g_periodactive), 12);
-
-
 	Timer t;
 
-	touch_packet_t touch_packet;
-	Reference touch_data(touch_packet);
+	Touch touch;
 
 	t.start();
 	while( t < duration ){
+		int touch_count;
+		if( (touch_count = touch.read()) > 0 ){
 
-		if( alert.get_value() == false ){
-
-			i2c.prepare(0x38);
-			i2c.read(
-						I2C::Location(ft_reg_num_finger),
-						touch_data
+			print_case_message(
+						"primary touch: %d,%d (%d,%d,%d) %d,%d",
+						touch.at(Touch::position_primary).point().x(),
+						touch.at(Touch::position_primary).point().y(),
+						touch.at(Touch::position_primary).is_pressed(),
+						touch.at(Touch::position_primary).is_released(),
+						touch.at(Touch::position_primary).is_active(),
+						touch.at(Touch::position_primary).pressure(),
+						touch.at(Touch::position_primary).area()
 						);
 
-
-			for(u32 i=0; i < touch_packet.count; i++){
+			if( touch_count > 1 ){
 				print_case_message(
-							"touch[%d]: %d, %d (%d,%d,%d,%d)",
-							i,
-							x(touch_packet.point[i]),
-							y(touch_packet.point[i]),
-							is_press(touch_packet.point[i]),
-							is_release(touch_packet.point[i]),
-							is_contact(touch_packet.point[i]),
-							touch_id(touch_packet.point[i])
+							"secondary touch: %d,%d (%d,%d,%d) %d,%d",
+							touch.at(Touch::position_secondary).point().x(),
+							touch.at(Touch::position_secondary).point().y(),
+							touch.at(Touch::position_secondary).is_pressed(),
+							touch.at(Touch::position_secondary).is_released(),
+							touch.at(Touch::position_secondary).is_active(),
+							touch.at(Touch::position_secondary).pressure(),
+							touch.at(Touch::position_secondary).area()
 							);
 			}
 
 
-		} else {
-			wait(Milliseconds(5));
 		}
+
+		wait(Milliseconds(10));
+
 	}
-
-
 
 	return case_result();
 }
