@@ -81,6 +81,7 @@ bool GraphTest::execute_class_api_case(){
 				Area(320,240)
 				);
 
+#if 0
 	if( display.set_window(window) < 0 ){
 		print_case_failed("failed to set window");
 		return case_result();
@@ -93,6 +94,7 @@ bool GraphTest::execute_class_api_case(){
 					display.error_number());
 
 	}
+#endif
 
 
 	return case_result();

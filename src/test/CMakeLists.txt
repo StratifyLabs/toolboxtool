@@ -18,6 +18,12 @@ set(SOURCES
 	TouchTest.hpp
 	SignalGeneratorTest.cpp
 	SignalGeneratorTest.hpp
+	SpiTest.cpp
+	SpiTest.hpp
+	UartTest.cpp
+	UartTest.hpp
+	WifiTest.cpp
+	WifiTest.hpp
 	WifiSpiTest.cpp
 	WifiSpiTest.hpp
 	PARENT_SCOPE)

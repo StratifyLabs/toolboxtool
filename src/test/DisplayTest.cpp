@@ -57,11 +57,13 @@ bool DisplayTest::execute_class_api_case(){
 	x_locations.at(1) = 375;
 	x_locations.at(2) = 725;
 
-	Text().set_string("Waveform")
+#if 0
+	ux::draw::Text().set_string("Waveform")
 			.set_color(3)
 			.set_align_center()
 			.set_align_middle()
 			.draw(drawing_attributes, DrawingPoint(0, 0), DrawingArea(1000, 1000));
+#endif
 
 	scratch << Pen().set_color(3);
 	scratch.draw_line(Point(0,0), scratch.center());
@@ -85,12 +87,14 @@ bool DisplayTest::execute_class_api_case(){
 
 	return true;
 
+#if 0
 	for(auto x: x_locations){
 	RoundedRectangle()
 			.set_radius(40)
 			.set_color(color)
 			.draw(drawing_attributes, DrawingPoint(x, 500-250/2),  DrawingArea(250, 250));
 	}
+#endif
 	t.stop();
 	print_case_message(
 				"drew rounded rectangles in %ld microseconds",
@@ -108,6 +112,7 @@ bool DisplayTest::execute_class_api_case(){
 	}
 
 	t.restart();
+#if 0
 	if( display.write(*display.bmap()) < 0 ){
 		print_case_failed(
 					"failed to write device (%d,%d)",
@@ -115,6 +120,7 @@ bool DisplayTest::execute_class_api_case(){
 					display.error_number());
 
 	}
+#endif
 	t.stop();
 	print_case_message(
 				"wrote %d bytes in %d us",

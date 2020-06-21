@@ -28,8 +28,8 @@ bool ScopeTest::execute_class_api_case(){
 
 	vdd_out_enable.set_output();
 	vdd_out_enable	= false;
-	vref_enable.set_input(Pin::IS_FLOAT);
-	div_10_enable.set_input(Pin::IS_FLOAT);
+	vref_enable.set_input(Pin::flag_is_float);
+	div_10_enable.set_input(Pin::flag_is_float);
 	//div_10_enable.set_output();
 	//div_10_enable = false;
 

@@ -4,11 +4,14 @@
 #include "SCopeTest.hpp"
 #include "TouchTest.hpp"
 #include "WifiSpiTest.hpp"
+#include "WifiTest.hpp"
 #include "DisplayTest.hpp"
 #include "SignalGeneratorTest.hpp"
 #include "GraphTest.hpp"
 #include "PioExtenderTest.hpp"
 #include "ToolboxIoTest.hpp"
+#include "UartTest.hpp"
+#include "SpiTest.hpp"
 
 bool Test::handle_tests(sys::Cli & cli){
 
@@ -25,8 +28,23 @@ bool Test::handle_tests(sys::Cli & cli){
 			test.execute(cli);
 		}
 
+		if( cli.get_option("uart") == "true" ){
+			UartTest test;
+			test.execute(cli);
+		}
+
+		if( cli.get_option("spi") == "true" ){
+			SpiTest test;
+			test.execute(cli);
+		}
+
 		if( cli.get_option("wifispi") == "true" ){
 			WifiSpiTest test;
+			test.execute(cli);
+		}
+
+		if( cli.get_option("wifi") == "true" ){
+			WifiTest test;
 			test.execute(cli);
 		}
 
