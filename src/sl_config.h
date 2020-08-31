@@ -16,5 +16,7 @@
 #define SL_CONFIG_PERMISSIONS "public"
 #define SL_CONFIG_HARDWARE_ID_STRING ""
 
+//Thread stack sizes
+
 #endif
 

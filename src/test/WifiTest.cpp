@@ -37,21 +37,27 @@ bool WifiTest::execute_class_api_case(){
 				.set_name("Santaslittlehelper")
 				);
 
-	wait(Seconds(5));
 	if( home_ap.is_valid() == false ){
 		print_case_failed("failed to find home AP");
 		return case_result();
 	}
 
-	if( wifi.connect(
+	wait(Seconds(2));
+	WifiIpInfo ip_info = wifi.connect(
 				home_ap,
 				WifiAuthInfo("anniedog")
-				) < 0  ){
-		print_case_failed(wifi.result(), __LINE__);
-		return case_result();
+				);
+
+	if( ip_info.is_valid() ){
+		print_case_message("connected to %s", home_ap.get_name().cstring());
+		print_case_message("IP: %s", ip_info.get_ip_address().to_string().cstring());
+	} else {
+		print_case_failed("failed to connect to %s", home_ap.get_name().cstring());
 	}
 
-	print_case_message("connected to %s", home_ap.get_name().cstring());
+
+	//gethostbyname("https://www.google.com");
+
 
 	return case_result();
 }
