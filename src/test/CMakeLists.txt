@@ -4,6 +4,8 @@ set(SOURCES
 	Test.hpp
 	ScopeTest.cpp
 	ScopeTest.hpp
+	LogicTest.cpp
+	LogicTest.hpp
 	PioExtenderTest.cpp
 	PioExtenderTest.hpp
 	PowerTouchTest.cpp

@@ -7,13 +7,13 @@
 
 class UartTest : public ::Test {
 public:
-	UartTest();
+  UartTest();
 
-	bool execute_class_api_case();
+  bool execute_class_api_case();
 
 private:
-	bool execute_uart_api_case(u32 port);
-
+  bool execute_uart_api_case(u32 port);
+  bool execut_uart_listen_case(u32 port);
 };
 
 #endif // UARTTEST_HPP
